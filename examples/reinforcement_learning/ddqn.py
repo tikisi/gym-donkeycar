@@ -14,9 +14,10 @@ from collections import deque
 
 import cv2
 import gym
+import gym_donkeycar
 import numpy as np
 import tensorflow as tf
-from tensorflow.keras import backend as K
+#from tensorflow.keras import backend as K
 from tensorflow.keras.layers import Activation, Conv2D, Dense, Flatten
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.optimizers import Adam
@@ -197,14 +198,25 @@ def run_ddqn(args):
     """
 
     # only needed if TF==1.13.1
-    config = tf.ConfigProto()
-    config.gpu_options.allow_growth = True
-    sess = tf.Session(config=config)
-    K.set_session(sess)
+    #config = tf.compat.v1.ConfigProto()
+    #config.gpu_options.allow_growth = True
+    #sess = tf.compat.v1.Session(config=config)
+    #K.set_session(sess)
+    gpus = tf.config.experimental.list_physical_devices('GPU')
+    if gpus:
+      try:
+        # Currently, memory growth needs to be the same across GPUs
+        for gpu in gpus:
+          tf.config.experimental.set_memory_growth(gpu, True)
+        logical_gpus = tf.config.experimental.list_logical_devices('GPU')
+        print(len(gpus), "Physical GPUs,", len(logical_gpus), "Logical GPUs")
+      except RuntimeError as e:
+        # Memory growth must be set before GPUs have been initialized
+        print(e)
 
     conf = {
         "exe_path": args.sim,
-        "host": "127.0.0.1",
+        "host": "172.17.0.1",
         "port": args.port,
         "body_style": "donkey",
         "body_rgb": (128, 128, 128),
