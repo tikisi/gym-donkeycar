@@ -17,6 +17,8 @@ from gym_donkeycar.envs.donkey_env import (
     WarehouseEnv,
     WarrenTrackEnv,
     WaveshareEnv,
+    Univ1fEnv,
+    Arp01Env
 )
 
 # Read version from file
@@ -49,3 +51,7 @@ register(id="donkey-warren-track-v0", entry_point="gym_donkeycar.envs.donkey_env
 register(id="donkey-thunderhill-track-v0", entry_point="gym_donkeycar.envs.donkey_env:ThunderhillTrackEnv")
 
 register(id="donkey-circuit-launch-track-v0", entry_point="gym_donkeycar.envs.donkey_env:CircuitLaunchEnv")
+
+register(id="univ1F-v0", entry_point="gym_donkeycar.envs.donkey_env:Univ1fEnv")
+
+register(id="arp01-v0", entry_point="gym_donkeycar.envs.donkey_env:Arp01Env")

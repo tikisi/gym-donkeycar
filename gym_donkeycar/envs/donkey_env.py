@@ -196,3 +196,11 @@ class ThunderhillTrackEnv(DonkeyEnv):
 class CircuitLaunchEnv(DonkeyEnv):
     def __init__(self, *args, **kwargs):
         super(CircuitLaunchEnv, self).__init__(level="circuit_launch", *args, **kwargs)
+
+class Univ1fEnv(DonkeyEnv):
+    def __init__(self, *args, **kwargs):
+        super(Univ1fEnv, self).__init__(level="univ1F", *args, **kwargs)
+
+class Arp01Env(DonkeyEnv):
+    def __init__(self, *args, **kwargs):
+        super(Arp01Env, self).__init__(level="arp01", *args, **kwargs)
