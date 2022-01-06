@@ -89,6 +89,11 @@ class DonkeyUnitySimHandler(IMesgHandler):
         self.image_array = np.zeros(self.camera_img_size)
         self.image_array_b = None
         self.last_obs = self.image_array
+
+        self.conf["cam_config"] = {}
+        self.conf["cam_config"]["img_h"] = self.camera_img_size[0]
+        self.conf["cam_config"]["img_w"] = self.camera_img_size[1]
+
         self.time_received = time.time()
         self.last_received = self.time_received
         self.hit = "none"
