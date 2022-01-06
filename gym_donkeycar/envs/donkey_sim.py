@@ -389,7 +389,7 @@ class DonkeyUnitySimHandler(IMesgHandler):
         if self.image_array_b is not None:
             info["image_b"] = self.image_array_b
 
-        # self.timer.on_frame()
+        self.timer.on_frame()
 
         return observation, reward, done, info
 
