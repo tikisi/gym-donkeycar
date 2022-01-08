@@ -487,8 +487,8 @@ class DonkeyUnitySimHandler(IMesgHandler):
     def on_race_stop(self, data):
         logger.debug("race stoped")
 
-    def on_missed_checkpoint(self, message):
-        logger.info("racer missed checkpoint")
+    def on_missed_checkpoint(self, data):
+        logger.info(f"racer missed checkpoint: expected is {data['expectedIndex']} but {data['observedIndex']} is observed")
         self.missed_checkpoint = True
 
     def on_DQ(self, data):
