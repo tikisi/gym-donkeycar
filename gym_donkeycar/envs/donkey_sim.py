@@ -103,6 +103,7 @@ class DonkeyUnitySimHandler(IMesgHandler):
         self.z = 0.0
         self.speed = 0.0
         self.missed_checkpoint = False
+        self.starting_line_num = 0
         self.dq = False
         self.over = False
         self.client = None
@@ -117,6 +118,7 @@ class DonkeyUnitySimHandler(IMesgHandler):
             "DQ": self.on_DQ,
             "ping": self.on_ping,
             "aborted": self.on_abort,
+            "collision_with_starting_line": self.on_collision_with_starting_line,
             "missed_checkpoint": self.on_missed_checkpoint,
             "need_car_config": self.on_need_car_config,
         }
@@ -340,6 +342,7 @@ class DonkeyUnitySimHandler(IMesgHandler):
         self.z = 0.0
         self.speed = 0.0
         self.over = False
+        self.starting_line_num = 0
         self.missed_checkpoint = False
         self.dq = False
         self.gyro_x = 0.0
@@ -486,6 +489,10 @@ class DonkeyUnitySimHandler(IMesgHandler):
 
     def on_race_stop(self, data):
         logger.debug("race stoped")
+
+    def on_collision_with_starting_line(self, data):
+        logger.info(f"Collision with starting line {self.starting_line_num}")
+        self.starting_line_num += 1
 
     def on_missed_checkpoint(self, data):
         logger.info(f"racer missed checkpoint: expected is {data['expectedIndex']} but {data['observedIndex']} is observed")
