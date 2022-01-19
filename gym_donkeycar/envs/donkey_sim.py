@@ -386,12 +386,12 @@ class DonkeyUnitySimHandler(IMesgHandler):
             "vel": (self.vel_x, self.vel_y, self.vel_z),
             "lidar": (self.lidar),
             "car": (self.roll, self.pitch, self.yaw),
+            "starting_line_num": self.starting_line_num,
         }
 
         # Add the second image to the dict
         if self.image_array_b is not None:
             info["image_b"] = self.image_array_b
-
         self.timer.on_frame()
 
         return observation, reward, done, info
