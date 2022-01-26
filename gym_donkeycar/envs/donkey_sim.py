@@ -341,6 +341,7 @@ class DonkeyUnitySimHandler(IMesgHandler):
         self.y = 0.0
         self.z = 0.0
         self.speed = 0.0
+        self.throttle = 0.0
         self.over = False
         self.starting_line_num = 0
         self.missed_checkpoint = False
@@ -444,6 +445,9 @@ class DonkeyUnitySimHandler(IMesgHandler):
 
         if "speed" in data:
             self.speed = data["speed"]
+
+        if "throttle" in data:
+            self.throttle = data["throttle"]
 
         if "gyro_x" in data:
             self.gyro_x = data["gyro_x"]
