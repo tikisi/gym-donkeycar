@@ -33,6 +33,9 @@ class DonkeyUnitySimContoller:
 
     def set_car_config(self, body_style, body_rgb, car_name, font_size):
         self.handler.send_car_config(body_style, body_rgb, car_name, font_size)
+    
+    def set_random_start_config(self, flag):
+        self.handler.send_random_start_config(flag)
 
     def set_cam_config(self, **kwargs):
         self.handler.send_cam_config(**kwargs)
@@ -174,6 +177,11 @@ class DonkeyUnitySimHandler(IMesgHandler):
         if "car_config" in conf.keys():
             self.set_car_config(conf["car_config"])
             logger.info("done sending car config.")
+
+        if "random_start_config" in conf.keys():
+            flag = conf["random_start_config"]["flag"]
+            self.send_random_start_config(flag)
+            logger.info(f"done sending random start config. {flag}")
 
         if "cam_config" in conf.keys():
             cam_config = self.extract_keys(
@@ -609,6 +617,14 @@ class DonkeyUnitySimHandler(IMesgHandler):
             "body_b": str(body_rgb[2]),
             "car_name": car_name,
             "font_size": str(font_size),
+        }
+        self.blocking_send(msg)
+        time.sleep(0.1)
+
+    def send_random_start_config(self, flag):
+        msg = {
+            "msg_type": "random_start_config",
+            "flag": flag
         }
         self.blocking_send(msg)
         time.sleep(0.1)
