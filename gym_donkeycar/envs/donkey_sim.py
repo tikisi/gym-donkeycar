@@ -107,6 +107,7 @@ class DonkeyUnitySimHandler(IMesgHandler):
         self.speed = 0.0
         self.missed_checkpoint = False
         self.starting_line_num = 0
+        self.lap_times = []
         self.dq = False
         self.over = False
         self.client = None
@@ -352,6 +353,7 @@ class DonkeyUnitySimHandler(IMesgHandler):
         self.throttle = 0.0
         self.over = False
         self.starting_line_num = 0
+        self.lap_times = []
         self.missed_checkpoint = False
         self.dq = False
         self.gyro_x = 0.0
@@ -396,6 +398,7 @@ class DonkeyUnitySimHandler(IMesgHandler):
             "lidar": (self.lidar),
             "car": (self.roll, self.pitch, self.yaw),
             "starting_line_num": self.starting_line_num,
+            "lap_times": self.lap_times
         }
 
         # Add the second image to the dict
@@ -498,6 +501,7 @@ class DonkeyUnitySimHandler(IMesgHandler):
         self.determine_episode_over()
 
     def on_cross_start(self, data):
+        self.lap_times.append(data['lap_time'])
         logger.info(f"crossed start line: lap_time {data['lap_time']}")
 
     def on_race_start(self, data):
