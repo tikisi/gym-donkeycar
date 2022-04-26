@@ -480,6 +480,8 @@ class DonkeyUnitySimHandler(IMesgHandler):
         # It should be setup in the 4 scenes available now.
         if "cte" in data:
             self.cte = data["cte"]
+            if math.fabs(self.cte) > self.max_cte:
+                logger.info(f"cte is {self.cte}")
 
         if "lidar" in data:
             self.lidar = self.process_lidar_packet(data["lidar"])
@@ -490,6 +492,8 @@ class DonkeyUnitySimHandler(IMesgHandler):
 
         if "hit" in data:
             self.hit = data["hit"]
+            if self.hit != "none":
+                logger.info(f"hit with: {self.hit}")
 
         self.determine_episode_over()
 
