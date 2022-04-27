@@ -352,7 +352,8 @@ class DonkeyUnitySimHandler(IMesgHandler):
         self.speed = 0.0
         self.throttle = 0.0
         self.over = False
-        self.starting_line_num = 0
+        self.starting_line_num = -1
+        self.time_stamps = []
         self.lap_times = []
         self.missed_checkpoint = False
         self.dq = False
@@ -483,8 +484,6 @@ class DonkeyUnitySimHandler(IMesgHandler):
         # It should be setup in the 4 scenes available now.
         if "cte" in data:
             self.cte = data["cte"]
-            if math.fabs(self.cte) > self.max_cte:
-                logger.info(f"cte is {self.cte}")
 
         if "lidar" in data:
             self.lidar = self.process_lidar_packet(data["lidar"])
@@ -501,7 +500,6 @@ class DonkeyUnitySimHandler(IMesgHandler):
         self.determine_episode_over()
 
     def on_cross_start(self, data):
-        self.lap_times.append(data['lap_time'])
         logger.info(f"crossed start line: lap_time {data['lap_time']}")
 
     def on_race_start(self, data):
@@ -511,8 +509,11 @@ class DonkeyUnitySimHandler(IMesgHandler):
         logger.debug("race stoped")
 
     def on_collision_with_starting_line(self, data):
-        logger.info(f"Collision with starting line {self.starting_line_num}")
+        self.time_stamps.append(data['timeStamp'])
+        if len(self.time_stamps) > 1:
+            self.lap_times.append(self.time_stamps[-1] - self.time_stamps[-2])
         self.starting_line_num += 1
+        logger.info(f"Collision with starting line {self.starting_line_num}")
 
     def on_missed_checkpoint(self, data):
         logger.info(f"racer missed checkpoint: expected is {data['expectedIndex']} but {data['observedIndex']} is observed")
