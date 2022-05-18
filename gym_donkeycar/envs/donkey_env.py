@@ -114,6 +114,9 @@ class DonkeyEnv(gym.Env):
     def set_episode_over_fn(self, ep_over_fn):
         self.viewer.set_episode_over_fn(ep_over_fn)
 
+    def set_determine_crash_fn(self, crash_fn):
+        self.viewer.set_determine_crash_fn(crash_fn)
+
     def seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
         return [seed]

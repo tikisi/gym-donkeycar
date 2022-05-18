@@ -46,6 +46,9 @@ class DonkeyUnitySimContoller:
     def set_episode_over_fn(self, ep_over_fn):
         self.handler.set_episode_over_fn(ep_over_fn)
 
+    def set_determine_crash_fn(self, crash_fn):
+        self.handler.set_determine_crash_fn(crash_fn)
+
     def wait_until_loaded(self):
         while not self.handler.loaded:
             logger.warning("waiting for sim to start..")
@@ -433,6 +436,15 @@ class DonkeyUnitySimHandler(IMesgHandler):
 
         # going fast close to the center of lane yeilds best reward
         return (1.0 - (math.fabs(self.cte) / self.max_cte)) * self.speed
+
+    def set_determine_crash_fn(self, crash_fn):
+        self.determine_crash = types.MethodType(crash_fn, self)
+        logger.debug("custom crash fn set")
+
+    def determine_crash(self):
+        # determine only crash (not include game clear)
+        return self.over
+
 
     # ------ Socket interface ----------- #
 
