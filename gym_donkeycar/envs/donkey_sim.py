@@ -111,6 +111,7 @@ class DonkeyUnitySimHandler(IMesgHandler):
         self.missed_checkpoint = False
         self.starting_line_num = 0
         self.lap_times = []
+        self.reward_param = {"lap_num": 0}
         self.dq = False
         self.over = False
         self.client = None
@@ -359,6 +360,7 @@ class DonkeyUnitySimHandler(IMesgHandler):
         self.time_stamps = []
         self.lap_times = []
         self.missed_checkpoint = False
+        self.reward_param = {'lap_num': 0}
         self.dq = False
         self.gyro_x = 0.0
         self.gyro_y = 0.0
