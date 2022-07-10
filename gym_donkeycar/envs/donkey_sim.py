@@ -88,7 +88,8 @@ class DonkeyUnitySimHandler(IMesgHandler):
         self.SceneToLoad = conf["level"]
         self.loaded = False
         self.max_cte = conf["max_cte"]
-        self.timer = FPSTimer()
+        self.timer = FPSTimer(name="observe")
+        self.recvTimer = FPSTimer(name="recvTimer")
 
         # sensor size - height, width, depth
         self.camera_img_size = conf["cam_resolution"]
@@ -512,6 +513,8 @@ class DonkeyUnitySimHandler(IMesgHandler):
                 logger.info(f"hit with: {self.hit}")
 
         self.determine_episode_over()
+
+        self.recvTimer.on_frame()
 
     def on_cross_start(self, data):
         logger.info(f"crossed start line: lap_time {data['lap_time']}")

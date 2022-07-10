@@ -15,6 +15,7 @@ import select
 import socket
 import time
 from threading import Thread
+from gym_donkeycar.core.fps import FPSTimer
 
 from .util import replace_float_notation
 
@@ -28,6 +29,9 @@ class SDClient:
         self.port = port
         self.poll_socket_sleep_sec = poll_socket_sleep_time
         self.th = None
+
+        # fps time
+        self.sendTimer = FPSTimer(name="sendTimer")
 
         # the aborted flag will be set when we have detected a problem with the socket
         # that we can't recover from.
@@ -140,6 +144,7 @@ class SDClient:
                     if self.msg is not None:
                         logger.debug("sending " + self.msg)
                         s.sendall(self.msg.encode("utf-8"))
+                        self.sendTimer.on_frame()
                         self.msg = None
 
                 if len(exceptional) > 0:
