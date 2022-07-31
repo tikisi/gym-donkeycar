@@ -111,6 +111,8 @@ class DonkeyUnitySimHandler(IMesgHandler):
         self.missed_checkpoint = False
         self.starting_line_num = 0
         self.lap_times = []
+        self.check_laps = []
+        self.check_lap_stamps = []
         self.reward_param = {"lap_num": 0}
         self.dq = False
         self.over = False
@@ -127,6 +129,7 @@ class DonkeyUnitySimHandler(IMesgHandler):
             "ping": self.on_ping,
             "aborted": self.on_abort,
             "collision_with_starting_line": self.on_collision_with_starting_line,
+            "collision_with_checkpoint": self.on_collision_with_checkpoint,
             "missed_checkpoint": self.on_missed_checkpoint,
             "need_car_config": self.on_need_car_config,
         }
@@ -359,6 +362,8 @@ class DonkeyUnitySimHandler(IMesgHandler):
         self.starting_line_num = -1
         self.time_stamps = []
         self.lap_times = []
+        self.check_laps = []
+        self.check_lap_stamps = []
         self.missed_checkpoint = False
         self.reward_param = {'lap_num': 0}
         self.dq = False
@@ -404,7 +409,8 @@ class DonkeyUnitySimHandler(IMesgHandler):
             "lidar": (self.lidar),
             "car": (self.roll, self.pitch, self.yaw),
             "starting_line_num": self.starting_line_num,
-            "lap_times": self.lap_times
+            "lap_times": self.lap_times,
+            "check_laps": self.check_laps
         }
 
         # Add the second image to the dict
@@ -528,6 +534,12 @@ class DonkeyUnitySimHandler(IMesgHandler):
             self.lap_times.append(self.time_stamps[-1] - self.time_stamps[-2])
         self.starting_line_num += 1
         logger.info(f"Collision with starting line {self.starting_line_num}")
+
+    def on_collision_with_checkpoint(self, data):
+        self.check_lap_stamps.append(data['timeStamp'])
+        if len(self.check_lap_stamps) > 1:
+            self.check_laps.append(self.check_lap_stamps[-1] - self.check_lap_stamps[-2])
+            logger.info(f"Collision with checkpoint. true_index: {data['index']}, index: {len(self.check_laps)}, laps:{self.check_laps[-1]}")
 
     def on_missed_checkpoint(self, data):
         logger.info(f"racer missed checkpoint: expected is {data['expectedIndex']} but {data['observedIndex']} is observed")
