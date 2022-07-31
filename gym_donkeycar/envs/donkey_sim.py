@@ -105,6 +105,7 @@ class DonkeyUnitySimHandler(IMesgHandler):
         self.hit = "none"
         self.cte = 0.0
         self.angle = 0.0
+        self.angle2 = 0.0
         self.x = 0.0
         self.y = 0.0
         self.z = 0.0
@@ -352,6 +353,7 @@ class DonkeyUnitySimHandler(IMesgHandler):
         self.hit = "none"
         self.cte = 0.0
         self.angle = 0.0
+        self.angle2 = 0.0
         self.x = 0.0
         self.y = 0.0
         self.z = 0.0
@@ -399,6 +401,7 @@ class DonkeyUnitySimHandler(IMesgHandler):
             "pos": (self.x, self.y, self.z),
             "cte": self.cte,
             "angle": self.angle,
+            "angle2": self.angle2,
             "speed": self.speed,
             "hit": self.hit,
             "gyro": (self.gyro_x, self.gyro_y, self.gyro_z),
@@ -504,6 +507,9 @@ class DonkeyUnitySimHandler(IMesgHandler):
 
         if "angle" in data:
             self.angle = data["angle"]
+
+        if "angle" in data:
+            self.angle2 = data["angle2"]
 
         if "lidar" in data:
             self.lidar = self.process_lidar_packet(data["lidar"])
