@@ -104,6 +104,7 @@ class DonkeyUnitySimHandler(IMesgHandler):
         self.last_received = self.time_received
         self.hit = "none"
         self.cte = 0.0
+        self.angle = 0.0
         self.x = 0.0
         self.y = 0.0
         self.z = 0.0
@@ -350,6 +351,7 @@ class DonkeyUnitySimHandler(IMesgHandler):
         self.last_received = self.time_received
         self.hit = "none"
         self.cte = 0.0
+        self.angle = 0.0
         self.x = 0.0
         self.y = 0.0
         self.z = 0.0
@@ -396,6 +398,7 @@ class DonkeyUnitySimHandler(IMesgHandler):
         info = {
             "pos": (self.x, self.y, self.z),
             "cte": self.cte,
+            "angle": self.angle,
             "speed": self.speed,
             "hit": self.hit,
             "gyro": (self.gyro_x, self.gyro_y, self.gyro_z),
@@ -498,6 +501,9 @@ class DonkeyUnitySimHandler(IMesgHandler):
         # It should be setup in the 4 scenes available now.
         if "cte" in data:
             self.cte = data["cte"]
+
+        if "angle" in data:
+            self.angle = data["angle"]
 
         if "lidar" in data:
             self.lidar = self.process_lidar_packet(data["lidar"])
