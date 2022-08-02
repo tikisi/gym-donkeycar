@@ -37,6 +37,9 @@ class DonkeyUnitySimContoller:
     def set_random_start_config(self, flag):
         self.handler.send_random_start_config(flag)
 
+    def set_reward_config(self, angle_time_step):
+        self.handler.send_reward_config(angle_time_step)
+
     def set_cam_config(self, **kwargs):
         self.handler.send_cam_config(**kwargs)
 
@@ -189,6 +192,10 @@ class DonkeyUnitySimHandler(IMesgHandler):
             flag = conf["random_start_config"]["flag"]
             self.send_random_start_config(flag)
             logger.info(f"done sending random start config. {flag}")
+
+        if "reward_config" in conf.keys():
+            self.send_reward_config(conf['reward_config']['angle_time_step'])
+            logger.info("done sending reward config")
 
         if "cam_config" in conf.keys():
             cam_config = self.extract_keys(
@@ -660,6 +667,14 @@ class DonkeyUnitySimHandler(IMesgHandler):
         msg = {
             "msg_type": "random_start_config",
             "flag": flag
+        }
+        self.blocking_send(msg)
+        time.sleep(0.1)
+
+    def send_reward_config(self, angle_time_step):
+        msg = {
+            "msg_type": "reward_config",
+            "angle_time_step": angle_time_step
         }
         self.blocking_send(msg)
         time.sleep(0.1)
