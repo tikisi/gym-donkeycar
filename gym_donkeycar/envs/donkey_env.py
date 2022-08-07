@@ -128,7 +128,8 @@ class DonkeyEnv(gym.Env):
         return observation, reward, done, info
 
     def reset(self):
-        self.viewer.reset()
+        #self.viewer.reset()
+        self.viewer.take_action([0.0, 0.0])
         observation, reward, done, info = self.viewer.observe()
         time.sleep(1)
         return observation

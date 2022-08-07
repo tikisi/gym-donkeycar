@@ -86,7 +86,8 @@ class DonkeyUnitySimHandler(IMesgHandler):
     def __init__(self, conf):
         self.conf = conf
         self.SceneToLoad = conf["level"]
-        self.loaded = False
+        #self.loaded = False
+        self.loaded = True
         self.max_cte = conf["max_cte"]
         self.timer = FPSTimer()
 
@@ -452,11 +453,12 @@ class DonkeyUnitySimHandler(IMesgHandler):
 
     def on_telemetry(self, data):
 
-        imgString = data["image"]
-        image = Image.open(BytesIO(base64.b64decode(imgString)))
+        if "image" in data:
+            imgString = data["image"]
+            image = Image.open(BytesIO(base64.b64decode(imgString)))
+            # always update the image_array as the observation loop will hang if not changing.
+            self.image_array = np.asarray(image)
 
-        # always update the image_array as the observation loop will hang if not changing.
-        self.image_array = np.asarray(image)
         self.time_received = time.time()
 
         if "image_b" in data:
@@ -592,14 +594,15 @@ class DonkeyUnitySimHandler(IMesgHandler):
             return
         msg = {
             "msg_type": "control",
-            "steering": steer.__str__(),
-            "throttle": throttle.__str__(),
+            "steering": steer,
+            "throttle": throttle,
             "brake": "0.0",
         }
         self.queue_message(msg)
 
     def send_reset_car(self):
-        msg = {"msg_type": "reset_car"}
+        #msg = {"msg_type": "reset_car"}
+        msg = {"msg_type": "control", "steering": 0.0, "throttle": 0.0}
         self.queue_message(msg)
 
     def send_get_scene_names(self):

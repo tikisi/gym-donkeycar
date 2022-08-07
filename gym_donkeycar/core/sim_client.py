@@ -6,10 +6,10 @@ notes: wraps a tcp socket client with a handler to talk to the unity donkey simu
 """
 import json
 
-from .client import SDClient
+from .http_client import HttpClient
 
 
-class SimClient(SDClient):
+class SimClient(HttpClient):
     """
     Handles messages from a single TCP client.
     """
@@ -27,15 +27,20 @@ class SimClient(SDClient):
         # we connect right away
         msg_handler.on_connect(self)
 
+    '''
     def send_now(self, msg):
         # takes a dict input msg, converts to json string
         # and sends immediately. right now, no queue.
         json_msg = json.dumps(msg)
         super().send_now(json_msg)
+    '''
 
     def queue_message(self, msg):
         # takes a dict input msg, converts to json string
         # and adds to a lossy queue that sends only the last msg
+        if(msg["msg_type"] != "control"):
+            return
+
         json_msg = json.dumps(msg)
         self.send(json_msg)
 
